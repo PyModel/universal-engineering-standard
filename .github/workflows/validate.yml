@@ -13,6 +13,8 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      SKILLS_REF: git+https://github.com/agentskills/agentskills@f130f348f502d9804278a617f86929846896d2e9#subdirectory=skills-ref
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -20,6 +22,23 @@ jobs:
       - name: Validate skill format (official skills-ref, pinned commit)
         # The validator requires the directory name to equal the skill name; the
         # checkout directory is the repository name.
-        run: pipx run --spec 'git+https://github.com/agentskills/agentskills@f130f348f502d9804278a617f86929846896d2e9#subdirectory=skills-ref' skills-ref validate "$GITHUB_WORKSPACE"
+        run: pipx run --spec "$SKILLS_REF" skills-ref validate "$GITHUB_WORKSPACE"
       - name: Check links and eval corpus structure
         run: python3 scripts/check.py
+      - name: Validate the installable artifact (git archive)
+        run: |
+          set -eu
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          skill="$tmp/universal-engineering-standard"
+          mkdir -p "$skill"
+          git archive HEAD | tar -x -C "$skill"
+          pipx run --spec "$SKILLS_REF" skills-ref validate "$skill"
+          test -f "$skill/SKILL.md"
+          grep -oE '\]\(references/[^)]+\)' SKILL.md | sed 's/^](//; s/)$//' |
+            while IFS= read -r ref; do
+              test -f "$skill/$ref" || { echo "artifact missing $ref"; exit 1; }
+            done
+          for dev in evals scripts .github .gitattributes .gitignore; do
+            test ! -e "$skill/$dev" || { echo "artifact contains $dev"; exit 1; }
+          done

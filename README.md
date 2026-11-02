@@ -51,7 +51,7 @@ Before architecture, pattern, dependency, or infrastructure decisions, audits, o
 
 ## Maintaining the skill
 
-- `python3 scripts/check.py` checks local links and eval case/rubric correspondence; CI also runs the official `skills-ref validate`.
+- `python3 scripts/check.py` checks local links and eval case/rubric correspondence; CI also runs the official `skills-ref validate` on the checkout and on the `git archive` artifact, and checks that the artifact has every referenced file and no maintainer files.
 - `evals/` holds the behavioral evaluation corpus and procedure; see [evals/README.md](evals/README.md).
 - `evals/`, `scripts/`, and `.github/` are `export-ignore`d, so `git archive HEAD` produces the bare installable skill.
 
