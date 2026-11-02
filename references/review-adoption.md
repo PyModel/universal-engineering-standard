@@ -28,7 +28,7 @@
 ### Phase 0 — Inventory, not refactor
 
 - Identify supported language/runtime, app type, entry points, deployments, data stores, dependencies, tests, CI, sensitive operations and owners.
-- Read code and test evidence; mark and score each applicable control with the rubric in SKILL.md §4.
+- Read code and test evidence; mark each applicable control with the SKILL.md §4 statuses. Uninspected controls are Unknown.
 - Record known incidents, bottlenecks, security obligations and user friction.
 
 ### Phase 1 — Establish quality foundations
@@ -70,7 +70,7 @@
 - [ ] Idempotency and ambiguous external outcomes are handled for consequential writes.
 - [ ] Tests use actual integration boundaries where needed.
 
-### New infrastructure or design pattern
+### New infrastructure or design pattern (depth scaled per SKILL.md §2)
 
 - [ ] A real problem is demonstrated with evidence.
 - [ ] Existing simpler alternatives have been considered.
@@ -84,4 +84,21 @@
 - [ ] No prompt injection or untrusted content promoted to instruction authority.
 - [ ] No unapproved destructive action or secret access.
 - [ ] Code and tests reviewed for actual behavior, not only plausible output.
-- [ ] Final report distinguishes verified, inferred, deferred and unknown claims.
+- [ ] Final report labels claims Verified, Unverified, Deferred or Unknown (SKILL.md §5).
+
+## Finding template
+
+Use one block per real gap or risk; passing checks get no block.
+
+```md
+### <one-line statement of the gap>
+
+Status: Partial | Missing | Unverified | Deferred | Unknown
+Severity: Critical | High | Medium | Low
+Confidence: High | Medium | Low
+
+Evidence: path/to/file:line; test name or observed behavior
+Impact: concrete failure, risk, or maintenance cost
+Recommendation: smallest justified change
+Verification: acceptance test; failure or edge case; remaining uncertainty
+```

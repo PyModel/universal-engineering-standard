@@ -9,22 +9,51 @@ Plain Markdown in the open Agent Skills format (`SKILL.md` + `references/`), so 
 
 ## Install
 
-Copy or symlink this folder into your agent's skills directory, for example:
+### Personal (all your projects)
+
+Clone once, then link the clone into each agent's skills directory:
 
 ```sh
-ln -s "$PWD/universal-engineering-standard" ~/.claude/skills/   # Claude Code (user)
-ln -s "$PWD/universal-engineering-standard" .claude/skills/     # Claude Code (project)
+git clone https://github.com/PyModel/universal-engineering-standard.git
+cd universal-engineering-standard
+
+# Claude Code
+mkdir -p "$HOME/.claude/skills"
+ln -s "$(pwd)" "$HOME/.claude/skills/universal-engineering-standard"
+
+# Codex and other agents that read the shared ~/.agents/skills directory
+mkdir -p "$HOME/.agents/skills"
+ln -s "$(pwd)" "$HOME/.agents/skills/universal-engineering-standard"
 ```
 
-Other agents: place the folder wherever that agent reads skills from (see its docs).
+Other agents: link the clone into whatever directory that agent reads skills from (see its docs). `git pull` in the clone updates every link.
+
+If `ln` reports `File exists`, an older copy or link is already there: inspect it with `ls -l <target>`, remove or rename it, then rerun `ln`.
+
+### Project (shared with collaborators)
+
+Commit a copy inside the project, since a symlink into your home directory does not exist on other machines. From the project root, with `DIR` set to the directory your agent reads (`.claude/skills` for Claude Code, `.agents/skills` for Codex):
+
+```sh
+DIR=.agents/skills
+mkdir -p "$DIR"
+git clone --depth 1 https://github.com/PyModel/universal-engineering-standard.git "$DIR/universal-engineering-standard"
+rm -rf "$DIR/universal-engineering-standard/.git"
+```
 
 ## Agents without skill support
 
-Add this line to the repo's `AGENTS.md` (or `CLAUDE.md`, `.cursorrules`, `GEMINI.md`, `.github/copilot-instructions.md`):
+Vendor the skill into the project as above, then add this line to the project's `AGENTS.md` (or `CLAUDE.md`, `.cursorrules`, `GEMINI.md`, `.github/copilot-instructions.md`), using the path where you placed it:
 
 ```md
-Before architecture, pattern, dependency, or infrastructure decisions, audits, or declaring a change done, read `universal-engineering-standard/SKILL.md` and follow it.
+Before architecture, pattern, dependency, or infrastructure decisions, audits, or declaring a change done, read `.agents/skills/universal-engineering-standard/SKILL.md` and follow it.
 ```
+
+## Maintaining the skill
+
+- `python3 scripts/check.py` checks local links and eval case/rubric correspondence; CI also runs the official `skills-ref validate`.
+- `evals/` holds the behavioral evaluation corpus and procedure; see [evals/README.md](evals/README.md).
+- `evals/`, `scripts/`, and `.github/` are `export-ignore`d, so `git archive HEAD` produces the bare installable skill.
 
 ## License
 

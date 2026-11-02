@@ -1,0 +1,13 @@
+id,should_trigger,prompt
+ues-01,true,"Review this static portfolio site and tell me what infrastructure it needs before launch."
+ues-02,true,"Audit how this Go modular monolith publishes events after a database commit and recommend reliability improvements."
+ues-03,true,"Orders are sometimes created twice when customers double-click Submit. Design the fix."
+ues-04,true,"Should I turn this three-command Python CLI into a plugin architecture before I add a fourth command?"
+ues-05,true,"Score this repository against the engineering standard. The ADRs say every write endpoint uses idempotency keys."
+ues-06,true,"The order listing endpoint is slow. Should we put Redis in front of it?"
+ues-07,true,"Audit this repository against the engineering standard and report the findings."
+ues-08,false,"Fix the off-by-one error in src/pagination.py line 42."
+ues-09,true,"Before I merge, check this change against a definition of done."
+ues-10,false,"Rename the variable tmp to orderTotal in cart.ts."
+ues-11,false,"Translate this README paragraph into Spanish."
+ues-12,false,"Write a haiku about Kubernetes."
