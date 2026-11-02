@@ -26,4 +26,8 @@ Add this line to the repo's `AGENTS.md` (or `CLAUDE.md`, `.cursorrules`, `GEMINI
 Before architecture, pattern, dependency, or infrastructure decisions, audits, or declaring a change done, read `universal-engineering-standard/SKILL.md` and follow it.
 ```
 
+## License
+
+MIT. See [LICENSE](LICENSE).
+
 © 2026 PyModel LLC
