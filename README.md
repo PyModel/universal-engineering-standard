@@ -19,16 +19,16 @@ cd universal-engineering-standard
 
 # Claude Code
 mkdir -p "$HOME/.claude/skills"
-ln -s "$(pwd)" "$HOME/.claude/skills/universal-engineering-standard"
+ln -sn "$(pwd)" "$HOME/.claude/skills/universal-engineering-standard"
 
 # Codex and other agents that read the shared ~/.agents/skills directory
 mkdir -p "$HOME/.agents/skills"
-ln -s "$(pwd)" "$HOME/.agents/skills/universal-engineering-standard"
+ln -sn "$(pwd)" "$HOME/.agents/skills/universal-engineering-standard"
 ```
 
 Other agents: link the clone into whatever directory that agent reads skills from (see its docs). `git pull` in the clone updates every link.
 
-If `ln` reports `File exists`, an older copy or link is already there: inspect it with `ls -l <target>`, remove or rename it, then rerun `ln`.
+Check the target first with `ls -ld <target>`. If a link is already there, `ln -sn` stops with `File exists`; if an older copy is there as a real directory, `ln` puts the new link *inside* it instead. Either way, remove or rename the old entry, then rerun `ln -sn`.
 
 ### Project (shared with collaborators)
 
